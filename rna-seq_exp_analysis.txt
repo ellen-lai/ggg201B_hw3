@@ -1,0 +1,64 @@
+#1 Install edgeR 
+ cd
+ git clone https://github.com/ctb/2017-ucdavis-igg201b.git
+
+ sudo Rscript --no-save ~/2017-ucdavis-igg201b/lab7/install-edgeR.R
+ 
+#2 Install salmon
+cd
+curl -L -O https://github.com/COMBINE-lab/salmon/releases/download/v0.8.0/Salmon-0.8.0_linux_x86_64.tar.gz
+ tar xzf Salmon-0.8.0_linux_x86_64.tar.gz
+ export PATH=$PATH:$HOME/Salmon-latest_linux_x86_64/bin
+ 
+#3 Make yeast directory
+ mkdir yeast
+ cd yeast
+ 
+#4 download data
+ From Lab 8:
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458500/ERR458500.fastq.gz
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458501/ERR458501.fastq.gz
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458502/ERR458502.fastq.gz
+
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458493/ERR458493.fastq.gz
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458494/ERR458494.fastq.gz
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458495/ERR458495.fastq.gz
+ 
+ #New data:
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458882/ERR458882.fastq.gz #wt
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458907/ERR458907.fastq.gz #wt
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458661/ERR458661.fastq.gz #mt
+ curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458562/ERR458562.fastq.gz #mt
+ 
+#5 download yeast reference genome
+ curl -O http://downloads.yeastgenome.org/sequence/S288C_reference/orf_dna/orf_coding.fasta.gz
+ 
+#6 Index yeast transcriptome
+ salmon index --index yeast_orfs --type quasi --transcripts orf_coding.fasta.gz
+ 
+#7 Run salmon on all samples
+for i in *.fastq.gz
+ do
+     salmon quant -i yeast_orfs --libType U -r $i -o $i.quant --seqBias --gcBias
+ done 
+ 
+#8 Collect all sample counts with fancy Python script
+
+curl -L -O https://github.com/ngs-docs/2016-aug-nonmodel-rnaseq/raw/master/files/gather-counts.py
+python2 gather-counts.py
+
+#9 Modified yeast.salmon.R script and uploaded the new script to yeast folder as yeast.salmon_2.R
+cd
+git clone https://github.com/ellen-lai/ggg201B_hw3
+
+#10 Run edgeR in R using modified R script
+cd yeast
+Rscript --no-save ../ggg201B_hw3/yeast.salmon_2.R
+
+#RESULTS AND DISCUSSION 
+
+#a few comments about number of genes lost and gained relative to lab 8
+
+#Compared to the findings in Lab 8, fewer genes were found to be differentially expressed (DE) between wildtype and mutant strains in the present analysis (at FDR p < 0.05, # of DE genes in lab 8 = 4182, whereas in the present analysis, # DE genes = 3032). Incorporating more biological replicates allowed the analysis to discern between differences in expression level due to the mutant vs. wildtype status and random variation within biological replicates. Ruling out more differences in gene expression due to variation among biological replicates ultimately reduced the number of DE genes.
+
+
