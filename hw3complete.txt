@@ -1,0 +1,83 @@
+    1  screen
+    2  clear
+    3  sudo apt-get -y update
+    4  sudo apt-get -y install r-base python3-matplotlib libzmq3-dev python3.5-dev texlive-latex-extra texlive-latex-recommended python3-virtualenv
+    5  clear
+    6  ls
+    7  sudo apt-get -y install r-base python3-matplotlib libzmq3-dev python3.5-dev texlive-latex-extra texlive-latex-recommended python3-virtualenv
+    8  cd ~/
+    9  python3 -m virtualenv -p python3.5 env --system-site-packages
+   10  . ~/env/bin/activate
+   11  pip3 install -U jupyter jupyter_client ipython pandas
+   12  jupyter notebook --generate-config
+   13  cat >>/home/ubuntu/.jupyter/jupyter_notebook_config.py <<EOF                    
+   14  c = get_config()                                                                
+   15  c.NotebookApp.ip = '*'                                                          
+   16  c.NotebookApp.open_browser = False                                              
+   17  c.NotebookApp.password = u'sha1:5d813e5d59a7:b4e430cf6dbd1aad04838c6e9cf684f4d76e245c'                                                                         
+   18  c.NotebookApp.port = 8000                                                       
+   19                                                                                  
+   20  EOF
+   21  vi 
+   22  vi .jupyter/jupyter_notebook_config.py 
+   23  ps auxw | grep cron
+   24  crontab -e
+   25  cd
+   26  cat >run-notebook.sh <<EOF                                                      
+   27  #! /bin/bash                                                                    
+   28  . ~ubuntu/env/bin/activate                                                      
+   29  jupyter notebook                                                                
+   30  EOF                                                                             
+   31  chmod +x run-notebook.sh
+   32  cat >run-notebook.sh <<EOF                                                      
+   33  #! /bin/bash                                                                    
+   34  . ~ubuntu/env/bin/activate                                                      
+   35  jupyter notebook                                                                
+   36  EOF                                                                             
+   37  chmod +x run-notebook.sh
+   38  EOF
+   39  vi run-notebook.sh 
+   40  chmod +x run-notebook.sh 
+   41  crontab -e
+   42  /home/ubuntu/run-notebook.sh 
+   43  vi run-notebook.sh 
+   44  ./run-notebook.sh 
+   45  fg
+   46  jobs
+   47  ps 
+   48  kill 17920
+   49  vi run-notebook.sh 
+   50  ./run-notebook.sh 
+   51  more .notebook.log 
+   52  more .notebook.err 
+   53  clear
+   54  sudo bash
+   55  shutdown -r now
+   56  screen -r
+   57  ps auxw | grep note
+   58  crontab -l
+   59  shutdown -h now
+   60  cd
+   61  sudo Rscript --no-save ~/2017-ucdavis-igg201b/lab7/install-edgeR.R
+   62  cd
+   63  curl -O ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR458/ERR458500/ERR458500.fastq.gz
+   64  for i in *.fastq.gz;  do      salmon quant -i yeast_orfs --libType U -r $i -o $i.quant --seqBias --gcBias;  done 
+   65  python2 gather-counts.py
+   66  cd
+   67  git clone https://github.com/ctb/2017-ucdavis-igg201b.git
+   68  cd yeast
+   69  cp ../2017-ucdavis-igg201b/lab8/yeast.salmon.R .
+   70  ls
+   71  nano
+   72  ls
+   73  Rscript --no-save ~/2017-ucdavis-igg201b/lab8/yeast.salmon_2.R
+   74  R
+   75  Rscript --no-save ./yeast.salmon_2.R
+   76  nano yeast.salmon_2.R 
+   77  nano
+   78  Rscript --no-save ./yeast.salmon_2.R
+   79  nano yeast.salmon_2.R 
+   80  Rscript --no-save ./yeast.salmon_2.R
+   81  history>hw3(complete).txt
+   82  history>hw3complete.txt .
+   83  history>hw3complete.txt 
